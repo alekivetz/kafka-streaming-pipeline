@@ -1,0 +1,21 @@
+{
+    "type": "record",
+    "name": "Payment",
+    "namespace": "com.pos.events",
+    "fields": [
+        {"name": "payment_id", "type": "string"},
+        {"name": "order_id", "type": "string"},
+        {"name": "table_number", "type": "int"},
+        {"name": "table_size", "type": "int"},
+        {"name": "server_name", "type": "string"},
+        {"name": "total_amount", "type": "float"},
+        {"name": "payment_method", "type": {
+            "type": "enum",
+            "name": "PaymentMethod",
+            "namespace": "com.pos.events",
+            "symbols": ["CASH", "CREDIT", "DEBIT", "TAP"]
+          }},
+        {"name": "paid_at", "type": {"type": "long", "logicalType": "timestamp-millis"}},
+        {"name": "table_duration_minutes", "type": "float"}
+    ]
+}

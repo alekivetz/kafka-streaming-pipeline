@@ -1,0 +1,12 @@
+{
+    "type": "record",
+    "name": "Order",
+    "namespace": "com.pos.events",
+    "fields": [
+        {"name": "order_id", "type": "string"},
+        {"name": "table_number", "type": "int"},
+        {"name": "table_size", "type": "int"},
+        {"name": "server_name", "type": "string"},
+        {"name": "opened_at","type": {"type": "long", "logicalType": "timestamp-millis"}}
+    ]
+}
