@@ -2,3 +2,5 @@ streamlit
 psycopg2-binary
 pandas
 python-dotenv
+supabase
+requests
