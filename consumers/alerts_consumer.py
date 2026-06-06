@@ -19,8 +19,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.utils import load_schema, connect_to_db, KAFKA_CONFIG, SCHEMA_REGISTRY_CONFIG
 
 HIGH_BILL_THRESHOLD = 250
-LONG_TABLE_DEMO_MINUTES = 2.5
-LONG_TABLE_SHOWCASE_MINUTES = 120
+LONG_TABLE_MINUTES = 120
 REVENUE_MILESTONE = 1000
 
 def handle_payment_event(event, conn):
@@ -44,7 +43,7 @@ def handle_payment_event(event, conn):
         queries.append((query, params))
     
     # Check for long table durations
-    if event["table_duration_minutes"] > LONG_TABLE_DEMO_MINUTES:
+    if event["table_duration_minutes"] > LONG_TABLE_MINUTES:
         query = """
             INSERT INTO alerts (alert_id, alert_type, message, triggered_at)
             VALUES (%(alert_id)s, %(alert_type)s, %(message)s, %(triggered_at)s)

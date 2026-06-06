@@ -60,7 +60,7 @@ if get_current_profile() is None:
     st.warning("The restaurant is currently closed. Historical data is shown.")
 else:
     st.success("The restaurant is currently open. Dashboard will update in real-time.")
-    
+
 st.markdown("---")
 
 # KPIs
@@ -93,7 +93,7 @@ with col5:
 
 
 # Charts
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([5, 6])
 with col1:
     st.write("## Revenue Over Time")
     df = run_query(query_dict["Rev Over Time"])
@@ -101,6 +101,11 @@ with col1:
         st.info("Waiting for payment data...")
     else:
         df["running_total"] = df["running_total"].astype(float)
+        df["minute_timestamp"] = pd.to_datetime(df["minute_timestamp"])
+        if df["minute_timestamp"].dt.date.nunique() > 1:
+            df["minute_timestamp"] = df["minute_timestamp"].dt.strftime("%b %-d %I:%M %p")
+        else:
+            df["minute_timestamp"] = df["minute_timestamp"].dt.strftime("%I:%M %p")
         st.line_chart(data=df,
                     x="minute_timestamp",
                     y="running_total",
@@ -123,7 +128,7 @@ with col2:
                     height='stretch')
         
 # Tables
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([6, 5])
 with col1:
     st.write("## Server Metrics")
     df = run_query(query_dict["Server Metrics"])
