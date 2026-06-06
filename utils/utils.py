@@ -1,5 +1,6 @@
 import os
 import psycopg2
+import pytz
 from datetime import datetime
 
 from dotenv import load_dotenv
@@ -45,7 +46,8 @@ def get_current_profile():
     Checks the current hour and returns the appropriate load profile name,
     or None if the restaurant is closed.
     """
-    current_hour = datetime.now().hour
+    edmonton_tz = pytz.timezone("America/Edmonton")
+    current_hour = datetime.now(edmonton_tz).hour
     for hours, profile in SCHEDULE.items():
         if current_hour in hours:
             return profile
