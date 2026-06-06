@@ -97,7 +97,7 @@ col1, col2 = st.columns([5, 6])
 with col1:
     st.write("## Revenue Over Time")
     df = run_query(query_dict["Rev Over Time"])
-    if df["running_total"].sum() == 0:
+    if df["running_total"].sum() == 0 or df.empty:
         st.info("Waiting for payment data...")
     else:
         df["running_total"] = df["running_total"].astype(float)
