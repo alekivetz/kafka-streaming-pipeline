@@ -18,7 +18,7 @@ A serializing producer registers Avro schemas with Schema Registry and produces 
 The metrics consumer aggregates events into four tables: per-minute order and revenue metrics, item popularity counts, recent payments, and per-server performance. The alerts consumer writes to a separate alerts table when bills, table durations, or revenue milestones cross defined thresholds.
 
 ### Streamlit
-A live dashboard that queries PostgreSQL every minute and displays KPI metrics, a cumulative revenue line chart, best-selling items, server performance with gradient-shaded tables, and recent alerts. Indicates whether the restaurant is currently open or closed based on the configured schedule.
+A live dashboard that queries PostgreSQL every minute via the Supabase REST API and displays KPI metrics, a cumulative revenue line chart, best-selling items, server performance with gradient-shaded tables, and recent alerts. Indicates whether the restaurant is currently open or closed based on the configured schedule.
 
 ### Skills Demonstrated
 - Event-driven architecture and real-time stream processing
@@ -133,6 +133,7 @@ Then run the producer and consumers as above.
 - The simulator follows a daily schedule (open 11am-11pm MT) with load profiles mapped to peak hours. No events will be produced outside opening hours.
 - To reset the database and start fresh: `docker compose down -v && docker compose up -d`
 - To test outside opening hours, re-enable the demo profile in `producer/simulator.py`
+- Streamlit Cloud does not support direct PostgreSQL connections. The deployed dashboard uses Supabase views called via the REST API instead of psycopg2.
 
 ---
 
@@ -149,7 +150,8 @@ Then run the producer and consumers as above.
 - **psycopg2**: Python to PostgreSQL connectivity
 - **pandas**: Dataframe handling in the dashboard
 - **Confluent Cloud**: Managed Kafka and Schema Registry hosting
-- **Supabase**: Managed PostgreSQL hosting
+- **Supabase**: Managed PostgreSQL hosting with REST API
+- **requests**: HTTP client for Supabase REST API calls
 
 ---
 
