@@ -18,8 +18,8 @@ from confluent_kafka.serialization import SerializationContext, MessageField
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.utils import load_schema, connect_to_db, KAFKA_CONFIG, SCHEMA_REGISTRY_CONFIG
 
-HIGH_BILL_THRESHOLD = 250
-LONG_TABLE_MINUTES = 120
+HIGH_BILL_THRESHOLD = 300
+LONG_TABLE_MINUTES = 90
 REVENUE_MILESTONE = 1000
 
 def handle_payment_event(event, conn):
@@ -59,7 +59,7 @@ def handle_payment_event(event, conn):
     
     # Check the total revenue
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(SUM(total_revenue), 0) FROM minute_metrics")
+    cur.execute("SELECT COALESCE(SUM(total_amount), 0) FROM recent_payments")
     result = cur.fetchone()
     total_revenue = float(result[0]) if result else 0.0
     cur.close()

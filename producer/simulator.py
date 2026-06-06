@@ -84,23 +84,27 @@ PAYMENT_METHODS = ["CASH", "CREDIT", "DEBIT", "TAP"]
 LOAD_PROFILES = {
     "quiet": {
         "arrival_interval": 30 * 60,
-        "max_tables": 4,
-        "round_interval": (10 * 60, 20 * 60)
+        "max_tables": 5,
+        "round_interval": (5 * 60, 10 * 60),
+        "eat_time": (20 * 60, 35 * 60)
     },
     "steady": {
         "arrival_interval": 20 * 60,
         "max_tables": 8,
-        "round_interval": (8 * 60, 15 * 60)
+        "round_interval": (10 * 60, 15 * 60),
+        "eat_time": (30 * 60, 50 * 60)
     },
     "busy": {
         "arrival_interval": 10 * 60,
         "max_tables": 12,
-        "round_interval": (5 * 60, 12 * 60)
+        "round_interval": (15 * 60, 20 * 60),
+        "eat_time": (50 * 60, 70 * 60)
     },
     "demo": {
         "arrival_interval": 10,
         "max_tables": 8,
-        "round_interval": (20, 60)
+        "round_interval": (20, 60),
+        "eat_time": (30, 90)
     }
 }
 
@@ -236,10 +240,13 @@ class RestaurantSimulator:
                     order.items.append(order_item_event)
                     events.append(("order-items", order_item_event))    
 
+                if order.current_round == 2:
+                    order.send_next_round = current_time + random.uniform(*self.profile["eat_time"])
+                else:
+                    order.send_next_round = current_time + random.uniform(*self.profile["round_interval"])
                 order.current_round += 1
                 order.rounds_remaining -= 1
-                order.send_next_round = current_time + random.uniform(*self.profile["round_interval"])
-
+                
                 
         # Check to see if any orders are ready to be paid, and if so, generate a payment event
         ready_to_pay = [order for order in self.active_orders.values() if order.rounds_remaining == 0]
